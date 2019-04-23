@@ -1,0 +1,5 @@
+#folders to be ignored
+.idea
+
+#files to be ignored
+.spg.exe
