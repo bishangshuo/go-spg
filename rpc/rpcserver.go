@@ -9,20 +9,14 @@ import (
 	"net/http"
 )
 
-type Args struct {
-	A int
-	B int
+type WalletArgs struct {
+	Account string
 }
 
-type RPCServer struct{}
+type Wallet struct{}
 
-func (s *RPCServer) Add(r *http.Request, args *Args, result *int) error {
-	*result = args.A + args.B
-	return nil
-}
-
-func (s *RPCServer) Subtract(r *http.Request, args *Args, result *int) error {
-	*result = args.A - args.B
+func (w *Wallet) GetNewAddress(r *http.Request, args *WalletArgs, address *string) error {
+	*address = "0x29138902384239090432"
 	return nil
 }
 
@@ -31,8 +25,9 @@ func RunRPCServer() {
 	server.RegisterCodec(json.NewCodec(), "application/json")
 	server.RegisterCodec(json.NewCodec(), "application/json;charset=UTF-8")
 
-	rpcs := &RPCServer{}
+	rpcs := &Wallet{}
 	server.RegisterService(rpcs, "")
+
 	r := mux.NewRouter()
 	r.Handle("/", server)
 
