@@ -8,7 +8,6 @@ import (
 	"go-spg/message"
 	"go-spg/utils"
 	"os"
-	"strings"
 )
 
 func AppInit(args []string) bool {
@@ -36,10 +35,6 @@ func AppInit(args []string) bool {
 
 func main() {
 	utils.PrintInfo("spgd starting...")
-
-	str := "user=bishangshuo"
-	arr := strings.Split(str, "=")
-	fmt.Println(arr)
 
 	utils.SetupEnviroment()
 
