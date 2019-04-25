@@ -11,16 +11,14 @@ import (
 	"log"
 )
 
-const walletVersion = byte(0x00) // 钱包版本
-const addressChecksumLen = 4 // 验证码长度
+const walletVersion = byte(0x00)
+const addressChecksumLen = 4
 
-// 钱包
 type Wallet struct {
 	PrivateKey ecdsa.PrivateKey
 	PublicKey  []byte
 }
 
-// 初始化钱包
 func NewWallet() *Wallet {
 	private, public := newKeyPair()
 	wallet := Wallet{private, public}
@@ -28,10 +26,8 @@ func NewWallet() *Wallet {
 	return &wallet
 }
 
-// 得到比特币地址
 func (w Wallet) GetAddress() string {
 	pubKeyHash := HashPubKey(w.PublicKey)
-
 
 	walletVersionedPayload := append([]byte{walletVersion}, pubKeyHash...)
 	checksum := checksum(walletVersionedPayload)
@@ -39,11 +35,9 @@ func (w Wallet) GetAddress() string {
 	fullPayload := append(walletVersionedPayload, checksum...)
 	address := Encode(fullPayload)
 
-	// 比特币地址格式：【钱包版本 + 公钥哈希 + 验证码】
 	return address
 }
 
-// 得到公钥哈希
 func HashPubKey(pubKey []byte) []byte {
 	publicSHA256 := sha256.Sum256(pubKey)
 
@@ -57,7 +51,6 @@ func HashPubKey(pubKey []byte) []byte {
 	return publicRIPEMD160
 }
 
-// 通过【钱包版本+公钥哈希】生成验证码
 func checksum(payload []byte) []byte {
 	firstSHA := sha256.Sum256(payload)
 	secondSHA := sha256.Sum256(firstSHA[:])
@@ -65,7 +58,6 @@ func checksum(payload []byte) []byte {
 	return secondSHA[:addressChecksumLen]
 }
 
-// 创建新的私钥、公钥
 func newKeyPair() (ecdsa.PrivateKey, []byte) {
 	curve := elliptic.P256()
 	private, err := ecdsa.GenerateKey(curve, rand.Reader)
@@ -77,7 +69,6 @@ func newKeyPair() (ecdsa.PrivateKey, []byte) {
 	return *private, pubKey
 }
 
-// 验证比特币地址
 func ValidateAddress(address string) bool {
 	pubKeyHash := base58.Decode(address)
 	actualChecksum := pubKeyHash[len(pubKeyHash)-addressChecksumLen:]

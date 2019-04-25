@@ -6,7 +6,6 @@ import (
 )
 
 const (
-	// alphabet is the modified base58 alphabet used by Bitcoin.
 	alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 
 	alphabetIdx0 = 'S'
@@ -46,12 +45,10 @@ var b58 = [256]byte{
 	255, 255, 255, 255, 255, 255, 255, 255,
 	255, 255, 255, 255, 255, 255, 255, 255,
 }
-//go:generate go run genalphabet.go
 
 var bigRadix = big.NewInt(58)
 var bigZero = big.NewInt(0)
 
-// Decode decodes a modified base58 string to a byte slice.
 func Decode(b string) []byte {
 	answer := big.NewInt(0)
 	j := big.NewInt(1)
@@ -83,7 +80,6 @@ func Decode(b string) []byte {
 	return val
 }
 
-// Encode encodes a byte slice to a modified base58 string.
 func Encode(b []byte) string {
 	x := new(big.Int)
 	x.SetBytes(b)
@@ -95,7 +91,6 @@ func Encode(b []byte) string {
 		answer = append(answer, alphabet[mod.Int64()])
 	}
 
-	// leading zero bytes
 	for _, i := range b {
 		if i != 0 {
 			break
@@ -103,7 +98,6 @@ func Encode(b []byte) string {
 		answer = append(answer, alphabetIdx0)
 	}
 
-	// reverse
 	alen := len(answer)
 	for i := 0; i < alen/2; i++ {
 		answer[i], answer[alen-1-i] = answer[alen-1-i], answer[i]
