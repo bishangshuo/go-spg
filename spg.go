@@ -4,6 +4,7 @@ package main
 import (
 	"fmt"
 	"go-spg/constv"
+	"go-spg/db/walletdb"
 	"go-spg/initial"
 	"go-spg/message"
 	"go-spg/utils"
@@ -35,6 +36,24 @@ func AppInit(args []string) bool {
 
 func main() {
 	utils.PrintInfo("spgd starting...")
+
+	//for i:=0;i<10;i++ {
+	//	wa := wallet.NewWallet()
+	//	address := wa.GetNewAddress()
+	//	fmt.Println(address)
+	//}
+
+	//walletdb := &db.WalletDB{}
+	wd  := walletdb.GetInstance()
+	address := "key100000001"
+	b := wd.SaveKeyWithAddress(address, "value1000000001")
+	if b{
+		if r,key:=wd.GetKeyWithAddress(address); r {
+			utils.PrintInfo("get key with address : %s, key=%s", address, key)
+		}else{
+			utils.PrintInfo("key invalid with address:%s", address)
+		}
+	}
 
 	utils.SetupEnviroment()
 

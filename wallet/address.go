@@ -15,19 +15,25 @@ const walletVersion = byte(0x00)
 const addressChecksumLen = 4
 
 type Wallet struct {
-	PrivateKey ecdsa.PrivateKey
-	PublicKey  []byte
+	//PrivateKey ecdsa.PrivateKey
+	//PublicKey  []byte
 }
 
 func NewWallet() *Wallet {
-	private, public := newKeyPair()
-	wallet := Wallet{private, public}
+
+	wallet := Wallet{}
 
 	return &wallet
 }
 
-func (w Wallet) GetAddress() string {
-	pubKeyHash := HashPubKey(w.PublicKey)
+func (w Wallet) dumpPrivKey() string {
+	return ""
+}
+
+func (w Wallet) GetNewAddress() string {
+	_, PublicKey := newKeyPair()
+
+	pubKeyHash := HashPubKey(PublicKey)
 
 	walletVersionedPayload := append([]byte{walletVersion}, pubKeyHash...)
 	checksum := checksum(walletVersionedPayload)
