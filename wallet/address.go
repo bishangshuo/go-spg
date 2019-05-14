@@ -7,6 +7,8 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"github.org/btcsuite/btcutil/base58"
+	"github.org/pkg/errors"
+	"go-spg/db/walletdb"
 	"golang.org/x/crypto/ripemd160"
 	"log"
 )
@@ -26,14 +28,10 @@ func NewWallet() *Wallet {
 	return &wallet
 }
 
-func (w Wallet) dumpPrivKey() string {
-	return ""
-}
-
 func (w Wallet) GetNewAddress() string {
-	_, PublicKey := newKeyPair()
+	privateKey, publicKey := newKeyPair()
 
-	pubKeyHash := HashPubKey(PublicKey)
+	pubKeyHash := HashPubKey(publicKey)
 
 	walletVersionedPayload := append([]byte{walletVersion}, pubKeyHash...)
 	checksum := checksum(walletVersionedPayload)
@@ -41,7 +39,19 @@ func (w Wallet) GetNewAddress() string {
 	fullPayload := append(walletVersionedPayload, checksum...)
 	address := Encode(fullPayload)
 
+	privateKeyStr := privateKey.D.String()
+	walletdb.GetInstance().SaveKeyWithAddress(address, privateKeyStr)
+
 	return address
+}
+
+func (w Wallet) DumpPrivKey(address string) (string, error){
+	r, key := walletdb.GetInstance().GetKeyWithAddress(address)
+	if r {
+		base58Key := base58.Encode([]byte(key))
+		return base58Key, nil
+	}
+	return "", errors.New("address is not in this wallet")
 }
 
 func HashPubKey(pubKey []byte) []byte {
