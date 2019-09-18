@@ -94,3 +94,7 @@ func ValidateAddress(address string) bool {
 
 	return bytes.Compare(actualChecksum, targetChecksum) == 0
 }
+
+func TestAddress(address string) bool {
+	return true
+}
