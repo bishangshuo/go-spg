@@ -1,7 +1,7 @@
 package walletdb
 
 import (
-	"github.com/syndtr/goleveldb/leveldb"
+	"github.com/btcsuite/goleveldb/leveldb"
 	"go-spg/utils"
 	"sync"
 )

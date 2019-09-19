@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"github.org/x/sys/windows/registry"
+	//"github.com/x/sys/windows/registry"
 	"go-spg/constv"
 	"os"
 	"runtime"
@@ -212,25 +212,25 @@ Windows 2000                    5.0
 Windows ME                      4.9
 Windows 98                      4.10
 */
-func GetWindowsVersion() float64 {
-	k, err := registry.OpenKey(registry.LOCAL_MACHINE, `SOFTWARE\Microsoft\Windows NT\CurrentVersion`, registry.QUERY_VALUE)
-	if err != nil {
-		panic("GetWindowsVersion error")
-	}
-	defer k.Close()
-
-	cv, _, err := k.GetStringValue("CurrentVersion")
-	if err != nil {
-		panic("GetWindowsVersion error")
-	}
-	fmt.Printf("CurrentVersion: %s\n", cv)
-
-	ver, err := strconv.ParseFloat(cv, 64)
-	if err == nil {
-		return ver
-	}
-	return 0.0
-}
+//func GetWindowsVersion() float64 {
+//	k, err := registry.OpenKey(registry.LOCAL_MACHINE, `SOFTWARE\Microsoft\Windows NT\CurrentVersion`, registry.QUERY_VALUE)
+//	if err != nil {
+//		panic("GetWindowsVersion error")
+//	}
+//	defer k.Close()
+//
+//	cv, _, err := k.GetStringValue("CurrentVersion")
+//	if err != nil {
+//		panic("GetWindowsVersion error")
+//	}
+//	fmt.Printf("CurrentVersion: %s\n", cv)
+//
+//	ver, err := strconv.ParseFloat(cv, 64)
+//	if err == nil {
+//		return ver
+//	}
+//	return 0.0
+//}
 
 func GetConfigFile() string {
 	confFile, set := GetArgString("-conf")
